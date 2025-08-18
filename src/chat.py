@@ -4,7 +4,13 @@ from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents.models import ListSortOrder, FileSearchTool, FilePurpose
 
-print(f"Welcome! Ask any question about {argv[1]} to begin")
+try:
+    file = argv[1]
+    print(f"Welcome! Ask any question about {file} to begin")
+except IndexError:
+    print("Welcome! What pdf should I answer questions about?")
+    file = input()
+    print(f"Ask any question about {file} to begin")
 
 user_input = input()
 
@@ -14,7 +20,7 @@ project = AIProjectClient(
 )
 
 # create vector store
-file = project.agents.files.upload(file_path=argv[1], purpose=FilePurpose.AGENTS)
+file = project.agents.files.upload(file_path=file, purpose=FilePurpose.AGENTS)
 vector_store = project.agents.vector_stores.create_and_poll(file_ids=[file.id], name="my_file")
 
 file_search = FileSearchTool(vector_store_ids=[vector_store.id])
