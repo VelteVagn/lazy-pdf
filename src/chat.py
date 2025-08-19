@@ -53,6 +53,10 @@ if __name__ == "__main__":
     user_input = input(f"{Fore.BLUE}you{Style.RESET_ALL}: ")
     print("")
 
+    # exit before connecting if prompted
+    if user_input.lower() in ("exit", "cancel", "quit"):
+        exit()
+
     # connect to Azure AI project
     project = AIProjectClient(
         endpoint="https://vetle-4221-resource.services.ai.azure.com/api/projects/vetle-4221",
