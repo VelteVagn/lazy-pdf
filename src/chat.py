@@ -17,6 +17,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # imports
+from colorama import Fore, Style, init
 from sys import argv
 import re
 from azure.ai.projects import AIProjectClient
@@ -27,6 +28,9 @@ def remove_citations(text: str) -> str:
     return re.sub("【.*?】", "", text).strip()
 
 if __name__ == "__main__":
+    # initialise colorama:
+    init(autoreset=True)
+
     # set the model name
     model_name = "gpt-4.1-nano"
     ui_name = re.sub("-", " ", model_name)
@@ -34,18 +38,18 @@ if __name__ == "__main__":
     # get the pdf by argument or prompt
     try:
         file = argv[1]
-        print(f"{ui_name}: Welcome! Ask any question about {file} to begin")
+        print(f"{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Welcome! Ask any question about {file} to begin")
         print("")
     except IndexError:
-        print("{ui_name}: Welcome! What pdf should I answer questions about?")
+        print("{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Welcome! What pdf should I answer questions about?")
         print("")
-        file = input("you: ")
+        file = input(f"{Fore.BLUE}you: ")
         print("")
-        print(f"{ui_name}: Ask any question about {file} to begin")
+        print(f"{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Ask any question about {file} to begin")
         print("")
 
     # get user input
-    user_input = input("you: ")
+    user_input = input(f"{Fore.BLUE}you{Style.RESET_ALL}: ")
     print("")
 
     # connect to Azure AI project
@@ -87,7 +91,7 @@ if __name__ == "__main__":
 
         # handle run errors
         if run.status == "failed":
-            print(f"run failed: {run.last_error}")
+            print(f"{Fore.RED}.run failed{Style.RESET_ALL}: {run.last_error}")
 
         # print thread messages
         messages = project.agents.messages.list(
@@ -95,7 +99,7 @@ if __name__ == "__main__":
         )
 
         # set bot name
-        role = f"{ui_name}: "
+        role = f"{Fore.GREEN}{ui_name}{Style.RESET_ALL}: "
 
         for message in messages:
             if message.run_id == run.id and message.text_messages:
@@ -105,7 +109,7 @@ if __name__ == "__main__":
                 role = "" # remove bot name to make chat cleaner
 
         # get new user imput
-        user_input = input("you: ")
+        user_input = input(f"{Fore.BLUE}you{Style.RESET_ALL}: ")
         print("")
 
     # cleanup
