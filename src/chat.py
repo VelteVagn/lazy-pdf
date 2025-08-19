@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     # set the model name
     model_name = "gpt-4.1-nano"
+    # give the name a colour in the CLI
     ui_name = f"{Fore.GREEN}{re.sub("-", " ", model_name)}{Style.RESET_ALL}"
 
     # get the pdf by argument or prompt
