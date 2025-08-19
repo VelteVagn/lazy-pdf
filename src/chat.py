@@ -27,17 +27,26 @@ def remove_citations(text: str) -> str:
     return re.sub("【.*?】", "", text).strip()
 
 if __name__ == "__main__":
+    # set the model name
+    model_name = "gpt-4.1-nano"
+    ui_name = re.sub("-", " ", model_name)
+
     # get the pdf by argument or prompt
     try:
         file = argv[1]
-        print(f"Welcome! Ask any question about {file} to begin")
+        print(f"{ui_name}: Welcome! Ask any question about {file} to begin")
+        print("")
     except IndexError:
-        print("Welcome! What pdf should I answer questions about?")
-        file = input()
-        print(f"Ask any question about {file} to begin")
+        print("{ui_name}: Welcome! What pdf should I answer questions about?")
+        print("")
+        file = input("you: ")
+        print("")
+        print(f"{ui_name}: Ask any question about {file} to begin")
+        print("")
 
     # get user input
-    user_input = input()
+    user_input = input("you: ")
+    print("")
 
     # connect to Azure AI project
     project = AIProjectClient(
@@ -55,7 +64,7 @@ if __name__ == "__main__":
     file_search = FileSearchTool(vector_store_ids=[vector_store.id])
     agent = project.agents.create_agent(
         model="gpt-4.1-nano",
-        name="gpt-4.1-nano",
+        name=model_name,
         instructions="You are a helpful assistant answering questions regarding the PDF.",
         tools=file_search.definitions,
         tool_resources=file_search.resources,
@@ -84,13 +93,20 @@ if __name__ == "__main__":
         messages = project.agents.messages.list(
             thread_id=thread.id, order=ListSortOrder.ASCENDING
         )
+
+        # set bot name
+        role = f"{ui_name}: "
+
         for message in messages:
             if message.run_id == run.id and message.text_messages:
                 raw_text = message.text_messages[-1].text.value
-                print(f"{message.role}: {remove_citations(raw_text)}")
+                print(f"{role}{remove_citations(raw_text)}")
+                print("")
+                role = "" # remove bot name to make chat cleaner
 
         # get new user imput
-        user_input = input()
+        user_input = input("you: ")
+        print("")
 
     # cleanup
     print("exiting...")
