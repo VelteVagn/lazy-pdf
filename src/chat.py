@@ -18,9 +18,13 @@
 
 # imports
 from sys import argv
+import re
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents.models import ListSortOrder, FileSearchTool, FilePurpose
+
+def remove_citations(text: str) -> str:
+    return re.sub("【.*?】", "", text).strip()
 
 if __name__ == "__main__":
     # get the pdf by argument or prompt
@@ -82,7 +86,8 @@ if __name__ == "__main__":
         )
         for message in messages:
             if message.run_id == run.id and message.text_messages:
-                print(f"{message.role}: {message.text_messages[-1].text.value}")
+                raw_text = message.text_messages[-1].text.value
+                print(f"{message.role}: {remove_citations(raw_text)}")
 
         # get new user imput
         user_input = input()
