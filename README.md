@@ -62,6 +62,11 @@ This project is licensed under the [GNU Affero General Public License (AGPL)](CO
 ## Notes
 
 This prgram connects to ChatGPT via Microsoft Azure which means a couple of things:
-1. To use it, you'll need a Microsoft Azure account, and either ask me for the proper permissions or substitute the endpoint with your own. 
+1. To use it, you'll need a Microsoft Azure account, and either [ask me](#contact) for the proper permissions or substitute the endpoint with your own. 
 2. Since I merely have a free subscription, regardless of permissions, the program will stop working in not too long when my free tokens expire.
 3. To not waste tokens, the program is made to minimise token use as much as possible, which necessarily weakens the functionality. 
+
+This program is based on code from Microsoft's [Quickstart: Get started with Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=python&pivots=fdp-project). 
+
+## Contact
+vetle@tjora.net
