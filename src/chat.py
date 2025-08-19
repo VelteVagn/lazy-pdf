@@ -33,19 +33,19 @@ if __name__ == "__main__":
 
     # set the model name
     model_name = "gpt-4.1-nano"
-    ui_name = re.sub("-", " ", model_name)
+    ui_name = f"{Fore.GREEN}{re.sub("-", " ", model_name)}{Style.RESET_ALL}"
 
     # get the pdf by argument or prompt
     try:
         file = argv[1]
-        print(f"{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Welcome! Ask any question about {file} to begin")
+        print(f"{ui_name}: Welcome! Ask any question about {file} to begin")
         print("")
     except IndexError:
-        print("{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Welcome! What pdf should I answer questions about?")
+        print("{ui_name}: Welcome! What pdf should I answer questions about?")
         print("")
-        file = input(f"{Fore.BLUE}you: ")
+        file = input(f"{Fore.BLUE}you{Style.RESET_ALL}: ")
         print("")
-        print(f"{Fore.GREEN}{ui_name}{Style.RESET_ALL}: Ask any question about {file} to begin")
+        print(f"{ui_name}: Ask any question about {file} to begin")
         print("")
 
     # get user input
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     agent = project.agents.create_agent(
         model="gpt-4.1-nano",
         name=model_name,
-        instructions="You are a helpful assistant answering questions regarding the PDF.",
+        instructions="You are a helpful assistant answering questions regarding the PDF. Keep the answers short and concise. Never give follow-up questions.",
         tools=file_search.definitions,
         tool_resources=file_search.resources,
     )
